@@ -4,7 +4,12 @@
 #### html，css
 
 - DOCTYPE
-- html标准
+
+> <!DOCTYPE> 声明必须是 HTML 文档的第一行，位于 `<html>` 标签之前,
+  <!DOCTYPE>不是html标签，它是指示浏览器页面使用哪种HTML版本进行编写的指令，
+  在html 4.01中，<!DOCTYPE>声明引用DTD，以为html 4.01是基于SGML，DTD规定了标记语言的规则，这样浏览器才能正确的呈现内容
+  而html 5不基于SGML，所以不需要引用DTD，直接使用<!DOCTYPE>就行
+
 - 语义化标签
 - 行内元素/块级元素/空元素
 - 定位（static，relative，position，fixed）
