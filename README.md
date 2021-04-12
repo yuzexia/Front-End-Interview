@@ -11,6 +11,9 @@
   而html 5不基于SGML，所以不需要引用DTD，直接使用<!DOCTYPE>就行
 
 - 语义化标签
+
+> 
+
 - 行内元素/块级元素/空元素
 - 定位（static，relative，position，fixed）
 - 垂直居中方法
@@ -55,8 +58,22 @@
 
 #### vue
 
+- 谈谈你对vue的理解
+
+> 1，`vue`是渐进式的`javascript`框架、核心库加插件、动态创建用户几面（异步获取后台数据，数据展示在界面）
+> 2，采用的式`MVVM`模式：代码简洁体积小（20kb min+gzip），运行效率高，适合移动PC端开发；本身只不关注`UI`（和`React`相似），可以轻松引入`vue`插件和第三方库进行开发
+
+- 说一下`MVVM`模式
+
+> `Model-View-ViewModel`, `Model`表示数据模型层，`View`表示视图层，`ViewModel`是`View`和`Model`层的桥梁，数据绑定到`ViewModel`层并自动渲染到页面中，视图变化通知`ViewModel`层更新数据
+
+- vue的数据双向绑定（响应式数据）的原理？
+
+> `Object.defineProperty`重新定义`data`中所有的属性，`Object.defineProperty`可以使数据的获取与设置增加一个拦截功能，拦截属性的获取，进行依赖手机，拦截属性的更新操作，进行通知。
+> 具体过程：1，首先`vue`使用`initData`初始化用户传入的参数，2，然后使用`new Observer`对数据进行观测，如果数据是一个对象就会调用`this.walk(value)`对对象进行处理，3，内部使用`defineReactive`循环对象属性定义响应式变化，4，核心就是使用`Object.defineProperty`重新定义数据
+![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5a5a919f243644a3a0fbeaa884d2f9cd~tplv-k3u1fbpfcp-watermark.image)
+
 - vue的生命周期，每个周期都能做那些事情？
-- vue的数据双向绑定的原理？
 - vue组件之间的传值(父子组件，兄弟组件)
 - v-if和v-for作用在同一个节点上的优先级是怎样的？
 - Vue中的watch，computed的却别
