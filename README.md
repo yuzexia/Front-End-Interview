@@ -12,7 +12,13 @@
 
 - 语义化标签
 
-> 
+> 元素本身传达了关于标签所包含内容类型的一些信息
+> 1，代码结构：在页面没有css的情况下，也能够呈现出很好的内容结构；2，有利于seo：爬虫依赖标签来确定关键词的权重，因此可以和搜索引擎建立良好的沟通，帮助爬虫抓取更多的有效信息；3，提升用户体验：例如title，alt可以用于解释名称或者解释图片信息，以及label标签的灵活运用；4，便于团队开发和维护：语义化使代码更具可读性，让其他开发人员更加理解html结构，减少差异化；5，方便其他设备解析：如屏幕阅读器，盲人阅读器，移动设备等，以有意义的方式来渲染网页
+> html5常用的语义元素：header,nav,article,section,aside
+
+![html5语义化标签](https://img-blog.csdn.net/20180626164405788?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4MTI4MTc5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+> 常用的语义化标签：header,h1,h2,h3,h4,h5,h6,nav,main,footer,article,section,p,ul,ol,li,blockquote,a,strong,em,q,abbr,small
 
 - 行内元素/块级元素/空元素
 - 定位（static，relative，position，fixed）
@@ -71,7 +77,23 @@
 
 > `Object.defineProperty`重新定义`data`中所有的属性，`Object.defineProperty`可以使数据的获取与设置增加一个拦截功能，拦截属性的获取，进行依赖手机，拦截属性的更新操作，进行通知。
 > 具体过程：1，首先`vue`使用`initData`初始化用户传入的参数，2，然后使用`new Observer`对数据进行观测，如果数据是一个对象就会调用`this.walk(value)`对对象进行处理，3，内部使用`defineReactive`循环对象属性定义响应式变化，4，核心就是使用`Object.defineProperty`重新定义数据
+
 ![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5a5a919f243644a3a0fbeaa884d2f9cd~tplv-k3u1fbpfcp-watermark.image)
+
+- vue的事件绑定原理
+
+> - 原生DOM的绑定：`vue`在创建真实DOM时会调用`createElm`，默认会调用`invokeCreateHooks`。会遍历当前平台下相对的属性处理代码，其中就有`updateDOMListeners`方法，内部会传入`add()`方法
+> - 组件绑定事件，原生事件，自定义事件：组件绑定事件时通过vue中自定义的`$on`方法实现的。（可以理解为：组件的`nativeOnOn`等价于普通元素的`on`组件的`on`会单独处理）
+
+- v-model中的实现原理以及如何自动逸v-model
+
+> `v-model`可以看成是`value+input`方法的语法糖（组件），原生的`v-model`，会根据标签的不同生成不同的事件与属性，来解析一个指令
+> 自定义：自己写`model`属性，里面放上`prop`和`event`
+
+- vue为什么采用异步渲染呢？
+
+> 
+
 
 - vue的生命周期，每个周期都能做那些事情？
 - vue组件之间的传值(父子组件，兄弟组件)
