@@ -1,7 +1,7 @@
 # Front-End-Interview
 前端面试知识点
 
-#### html，css
+## html，css
 
 - DOCTYPE
 
@@ -38,7 +38,7 @@
 - 多端兼容性的解决方案?
 - flex布局
 
-#### javascript，ES6
+## javascript，ES6
 
 - 变量的声明方式有哪些？如何声明变量，可以具有块级作用域？
 - let，const，var的区别
@@ -63,7 +63,7 @@
 - 说说你对ES6 proxy的理解
 - JS模块化（commonjs/amd/cmd/es6）
 
-#### vue
+## vue
 
 - 谈谈你对vue的理解
 
@@ -393,7 +393,7 @@ console.log(this.$route.params);
 >       const Baz = () => {/*webpackChunkName: "group-baz"*/ './Baz.vue'}
 >       /*Webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中*/
 >   ```
-#### react
+## react
 
 - React的生命周期？
 - React组件间的数据传递（父子组件，兄弟组件之间）
@@ -407,7 +407,7 @@ console.log(this.$route.params);
 - redux数据流的原理？
 - setState是同步还是异步，几个参数是什么含义？
 
-#### 浏览器
+## 浏览器
 
 - 从输入url到呈现页面的过程
 - 强缓存、协商缓存、cdn缓存
@@ -418,7 +418,7 @@ console.log(this.$route.params);
 - 事件机制有哪些？
 - 前端路由方式
 - 重绘（Rapaint）和回流（Reflow）
-#### 前端工程化(webpack)
+## 前端工程化(webpack)
 
 > webpack也基本上成了必考的内容，一般会问是否配置过webpack、做过哪些优化之类的。
 
@@ -435,7 +435,7 @@ console.log(this.$route.params);
 - 如何编写一个loader、plugin
 - tree-shaking作用，如何才能生效
 
-#### 网络知识
+## 网络知识
 
 - 说说你对http的理解
 - https与http的区别(https为什么比http安全，详细解答)
@@ -451,7 +451,7 @@ console.log(this.$route.params);
 - 什么是csrf，如何预防
 - 为什么会造成csrf攻击
 
-#### 性能优化方面
+## 性能优化方面
 
 - 首屏加载如何优化
 - 一个网页从请求到呈现花了很长时间，如何排查
