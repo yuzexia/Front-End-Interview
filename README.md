@@ -251,6 +251,148 @@
 - SSR
 - vue-router
 
+> `vue-router`是vue.js官方的路由管理器，它和vue.js核心深度集成，让构建单页应用更简单
+> 主要组件：`<router-link>`、`<router-view>`、`<keep-alive>`
+
+- `active-class`是哪个组件的属性？
+
+> `active-class`是`<router-link>`的属性，用来做选中样式的切换，当`router-link`标签被点击时，将会应用这个样式
+
+- vue-router的动态路由
+
+> - 动态路由的创建主要使用`path`属性，使用动态路径参数，以冒号开头
+
+```js
+{
+    path: 'details/:id',
+    name: 'Details',
+    compontents: Details
+}
+```
+> 访问details目录下的所有文件，如`details/a`,`details/b`，都会映射到Details组件上
+
+> - 当匹配到/details下的路由时，参数值会被设置到`this.$route.params`下，所以通过该属性可以获取动态参数
+
+```js
+console.log(this.$route.params);
+```
+
+- `vue-router`有几种导航钩子
+
+> - 全局前置守卫
+>   ```js
+>       const router = new VueRouter({});
+>       router.beofreEach((to, from, next) => {
+>           // to do somethings
+>       })
+>   ```
+>   - to: Route 代表要进入的目标路由，它是一个路由对象
+>   - from：Route 代表当前正要离开的路由，它是一个对象
+>   - next: Function 必须需要调用的方法，具体的执行效果则依赖next方法调用的参数
+>       - next():进入管道中的下一个钩子，如果全部的钩子执行完了，则导航的状态就是comfirmed(确认的)
+>       - next(false):终端当前的导航，如果浏览器URL改变，那么URL会重置到from路由对应的地址
+>       - next('/') || next({path: '/'}):跳转到一个不同的地址，当前当行终端，执行新的导航
+>   - *next方法必须调用，否则钩子函数如法resolved
+> - 全局后置钩子
+>   ```js
+>       router.afterEach((to, from) => {
+>           // to do somethins
+>       })
+>   ```
+>   - 后置钩子并没有next函数，也不会改变导航本身
+> - 路由独享钩子
+>   - beforeEnter
+>       ```js
+>           const router = new VueRouter({
+>               routes: [{
+>                   path: '/home',
+>                   component: Home,
+>                   beforeEnter: (to, from, next) => {
+>                       // to do somethins
+>                       // 参数于全局守卫参数一样
+>                   }
+>               }]
+>           })
+>       ```
+> - 组件内导航钩子
+
+- `$route`和`$router`的区别是什么？
+
+> - `$router`是`VurRouter`的实例，是一个全局路由对象，包含了路由跳转的方法、钩子函数等
+> - `$route`是路由信息对象/跳转的路由对象，每一个路由都会有一个`router`对象，是一个局部对象，包含`ptah, params, hash, query, fullPath, matched, name`等路由信息参数
+
+- vue-router响应路由参数的变化
+
+> - 用watch检测
+> ```js
+>   watch: {
+>       $route(to, from) {
+>           console.log(to.path);   
+>           // 对路由变化做出响应
+>       }
+>   }
+> ```
+> - 组件内导航钩子函数
+> ```js
+>   beforeRouteUpdate(to, from, next) {
+>       // to do somethings
+>   }
+> ```
+
+- vue-router传参方式
+
+> - Params
+> - Query
+
+- vue-router的两种模式
+
+> - hash
+>   - 原理是onhashchange事件，可以在window对象上监听这个事件
+>   ```js
+>       window.onhashchange = function(event) {
+>           console.log(event.oldURL, event.newURL);
+>           let hash = location.hash.slice(1)
+>       }
+>   ```
+> - history
+>   - 利用html5 history interface中新增的`pushState()`和`replaceState()`方法
+>   - 需要后台配置支持，如果刷新时，服务器没有响应资源，会显示404
+
+- vue-router懒加载的实现方式
+
+> - 当打包构建应用时，Javascript包会非常大，影响页面加载。如果我们**能把不同路由对应的组件分割成不同代码块，然后当路由被访问时再加载对应组件**，这样就更高效了。
+> - 结合vue的[异步组件](https://cn.vuejs.org/v2/guide/components-dynamic-async.html#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6)和webpack的[代码分割功能](https://doc.webpack-china.org/guides/code-splitting-async/#require-ensure-/)，可以实现实现路由组件的懒加载
+> - 配置懒加载的步骤
+>   - 1，将异步组件定义为返回一个Promise的工厂函数（该函数返回的Promise应该时resolve组件本身）
+>   ```js
+>       const Foo = () => {
+>           Promise.resolve({
+>               /*组件定义对象*/
+>           })
+>       }
+>   ```
+>   - 2，在webpack中，使用动态import语法来定义代码分快点（split point）
+>   ```js
+>       import('./Foo.vue'); // 返回Promise
+>   ```
+>   - 3， 结合这两者，这就是如何定义一个能够被 Webpack 自动代码分割的异步组件。
+>   ```js
+>       const Foo = () => import('./Foo.vue);
+>   ```
+>   - 4，在路由配置中什么都不需要改变，只需要像往常一样使用 Foo：
+>   ```js
+>       const router = new VueRouter({
+>           routes: [{path: './foo, component: Foo}]
+>       })
+>   ```
+> - 把组件按组分块
+>   - 有时候我们想把某个路由下的所有组件都打包在同个异步块 (chunk) 中。只需要使用 命名 chunk，一个特殊的注释语法来提供 chunk name (需要 Webpack > 2.4)
+>   ```js
+>       const Foo = () => {/*webpackChunkName: "group-foo"*/ './Foo.vue'}
+>       const Bar = () => {/*webpackChunkName: "group-bar"*/ './Bar.vue'}
+>       const Baz = () => {/*webpackChunkName: "group-baz"*/ './Baz.vue'}
+>       /*Webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中*/
+>   ```
 #### react
 
 - React的生命周期？
