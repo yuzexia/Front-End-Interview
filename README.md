@@ -36,7 +36,7 @@
 - 弹性盒子的布局模型，并解释如何使用？
 - 移动端多屏幕适配的通用方案有哪些，REM是什么含义?
 - 多端兼容性的解决方案?
-- flex布局
+- flex布局（弹性布局）
 
 ## javascript，ES6
 
@@ -77,7 +77,11 @@
 - vue的数据双向绑定（响应式数据）的原理？
 
 > `Object.defineProperty`重新定义`data`中所有的属性，`Object.defineProperty`可以使数据的获取与设置增加一个拦截功能，拦截属性的获取，进行依赖手机，拦截属性的更新操作，进行通知。
-> 具体过程：1，首先`vue`使用`initData`初始化用户传入的参数，2，然后使用`new Observer`对数据进行观测，如果数据是一个对象就会调用`this.walk(value)`对对象进行处理，3，内部使用`defineReactive`循环对象属性定义响应式变化，4，核心就是使用`Object.defineProperty`重新定义数据
+> 具体过程：
+> - 1，首先`vue`使用`initData`初始化用户传入的参数，
+> - 2，然后使用`new Observer`对数据进行观测，如果数据是一个对象就会调用`this.walk(value)`对对象进行处理，
+> - 3，内部使用`defineReactive`循环对象属性定义响应式变化，
+> - 4，核心就是使用`Object.defineProperty`重新定义数据
 
 ![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5a5a919f243644a3a0fbeaa884d2f9cd~tplv-k3u1fbpfcp-watermark.image)
 
@@ -134,19 +138,37 @@
 
 
 > 获取父子组件实例的方法：
-> - 父组件提供数据，子组件注入。`provide`、`inject`
+> - 父组件提供数据，子组件注入。`provide`、`inject` 适用于隔代组件通信
+>   - 祖先组件通过`provide`来提供变量，然后再子孙组件中通过`inject`来注入变量。`provide/inject API`主要解决跨级组件间的通信问题，不过它的使用场景，主要是子组件获取上级组件的状态，跨级组件间建立一种主动提供于依赖注入的关系
 > - `ref`获取组件实例，调用组件的属性、方法
+>   - ref：如果在普通DOM元素上使用，引用指向的就是DOM元素；如果用在子组件上，引用就指向组件实例。
+>   - `$parent, $children`：访问父/子组件实例
 > - 跨组件通信`Event Bus(Vue.prototype.bus=new Vue)`其实基于`$on`与`$emit`
+>   - 这种方法通过一个空的VUE实例作为中央事件总线（事件中心），用它来触发事件/监听事件，从而实现任何组件间的通信，包括父子，隔代，兄弟组件。
+> - `$attr/$listeners` ：适用于父子、隔代、兄弟组件通信
+>   - `$attr`：包含了父作用域中不被`props`所识别的的特定绑定（style，class除外），当一个组件没有申明任何`props`时，这里会包含所有父作用域中的绑定，并且可以通过`v-bind="$attr"`传入内部组件。通常配合`inheritAttrs`选项一起使用。
+>   - `$listeners`：包含父作用域中（不含`.native`修饰器）`v-on`事件监听器，它可以通过`v-on="$listeners"`传入内部组件
 > - vuex状态管理实现通信
 
 - vuex的工作原理
 
 > Vuex是一个专门为vue.js应用程序开发的*状态管理模式*
+>   - 每一个vuex的核心是`store`(仓库)，store基本上是一个容器，包含应用中大部分的状态(state)，
+>       - vuex的状态存储时响应式的，当vue组件从store中获取状态的时候，当store中的状态发生变化时，那么相应的组件也会相应的得到高效更新
+>       - 改变store中的状态唯一途径就是显示的提交(commit)mutation，这样可以方便跟踪每个状态的变化。
 > Vuex状态自管理应用包含以下几个部分：
-> - state：驱动应用的数据源
+> - state：驱动应用的数据源，定义了数据状态的数据结构，可以再这里设置默认的初始状态
 > - view：以声明方式将state映射到视图(view)
 > - actions：响应再view上的用户输入导致的状态变化，下图单向数据流示意图
+
 ![](https://vuex.vuejs.org/flow.png)
+
+> vuex状态自管理应用的核心概念：
+> - State：定义了数据状态的数据结构，可以再这里设置默认的初始状态
+> - Getter：允许组件从state中获取数据，mapGetters辅助函数仅仅时将store中的getter映射到局部计算属性
+> - Mutation：时唯一更改store状态的方法，且必须时同步函数
+> - Action：用于提交mutation，而不是直接更改状态，可以包含任何异步操作
+> - Module：允许将单一Store拆分为多个store且同时保存在单一状态树中
 
 > vuex多组件共享状态，因单向数据数据流简洁性很容易被破坏
 > - 多个视图依赖同一状态
@@ -249,6 +271,19 @@
 - 虚拟DOM为什么快
 - NextTick 原理分析
 - SSR
+
+> - vue.js是构建客户端应用程序的框架，一般情况下，可以在浏览器中输出vue组件，进行生成DOM和操作DOM，然而，也可以将同一组件渲染为服务端的HTML字符串，将他们直接发送到浏览器，最后将这些静态标记"激活"为客户端上完全可交互的应用程序。
+> - 即SSR：vue将客户端渲染将标签渲染成的整个html片段的工作在服务端完成，服务端形成的html片段返回给客户端，这个过程叫做服务端渲染
+
+- 与传统SPA(Single Page Application)相比，服务端渲染(SSR)有什么优缺点
+    - 更好的SEO，由于搜索引擎爬虫抓取工具可以直接直接查看完全渲染的页面：SPA页面内容是通过AJAX异步获取的，而搜索引擎抓取工具不会等待AJAX异步完成之后再抓取页面内容，所以SPA中是抓取不到AJAX获取到的内容的；而SSR是直接通过服务端返回直接渲染好的页面(数据已经包含在页面中)，所以搜索引擎爬虫工具可以抓取渲染好的页面
+    - 更快的内容到达时间(time-to-content)，首屏加载更快：SPA会等到所有vue编译后的js文件都下载完成后，才开始进行页面的渲染；而SSR直接由服务端渲染好页面直接返回显示，无需等待下载js文件再去渲染，所以SSR有更快的内容到达时间
+
+> 使用服务器端渲染 (SSR) 时还需要有一些权衡之处
+
+  - SSR需要更多的开发条件限制：浏览器特定代码，只能在某些特定的生命周期函数(lifecycle hook)中使用，服务端渲染只支持`beforeCreate/created`两个钩子函数，这会导致一些外部扩展库需要特殊处理，才能在服务端渲染的应用程序中运行
+  - 涉及构建设置和部署的更多要求。与可以部署在任何静态文件服务器上的完全静态单页面应用程序 (SPA) 不同，服务器渲染应用程序，需要处于 Node.js server 运行环境。
+  - 更多的服务器端负载。在 Node.js 中渲染完整的应用程序，显然会比仅仅提供静态文件的 server 更加大量占用 CPU 资源 (CPU-intensive - CPU 密集)，因此如果你预料在高流量环境 (high traffic) 下使用，请准备相应的服务器负载，并明智地采用缓存策略。
 - vue-router
 
 > `vue-router`是vue.js官方的路由管理器，它和vue.js核心深度集成，让构建单页应用更简单
@@ -363,7 +398,7 @@ console.log(this.$route.params);
 > - 当打包构建应用时，Javascript包会非常大，影响页面加载。如果我们**能把不同路由对应的组件分割成不同代码块，然后当路由被访问时再加载对应组件**，这样就更高效了。
 > - 结合vue的[异步组件](https://cn.vuejs.org/v2/guide/components-dynamic-async.html#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6)和webpack的[代码分割功能](https://doc.webpack-china.org/guides/code-splitting-async/#require-ensure-/)，可以实现实现路由组件的懒加载
 > - 配置懒加载的步骤
->   - 1，将异步组件定义为返回一个Promise的工厂函数（该函数返回的Promise应该时resolve组件本身）
+>   - 1，将异步组件定义为返回一个Promise的工厂函数（该函数返回的Promise应该是resolve组件本身）
 >   ```js
 >       const Foo = () => {
 >           Promise.resolve({
@@ -371,7 +406,7 @@ console.log(this.$route.params);
 >           })
 >       }
 >   ```
->   - 2，在webpack中，使用动态import语法来定义代码分快点（split point）
+>   - 2，在webpack中，使用动态import语法来定义代码分块点（split point）
 >   ```js
 >       import('./Foo.vue'); // 返回Promise
 >   ```
